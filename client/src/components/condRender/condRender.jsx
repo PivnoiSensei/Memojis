@@ -9,21 +9,26 @@ import "../../styles/condRender.css";
 function App(props) {
   const [headingText, setHeadingText] = useState("Hello")
   const [buttonBackColor, setButtonBackColor] = useState("white")
-  const [fullName, setFullName] = useState({
-    fName:  "",
+  const [fullAccount, setFullAccount] = useState({
+    fName: "",
     lName: "",
+    email: ""
   })
   const [headerName, setHeaderName] = useState("")
     function handleClick(){
       setHeaderName(name)
     }
   function checkEmpty(event){
-    if(fullName.fName == ""){
+    if(fullAccount.fName == ""){
       setHeadingText("Please fill the first name")
       event.preventDefault();
       return false;
-    }else if(fullName.lName == ""){
+    }else if(fullAccount.lName == ""){
       setHeadingText("Please fill the last name")
+      event.preventDefault();
+      return false;
+    }else if(fullAccount.email == ""){
+      setHeadingText("Please fill the email")
       event.preventDefault();
       return false;
     }
@@ -38,37 +43,37 @@ function App(props) {
   function handleChange(event){
     const {value, name} = event.target;
     
-    setFullName (prevName =>{
-      if(name === "fName"){
+    setFullAccount (prev =>{
         return{
-          fName: value,
-          lName: prevName.lName
+          ...prev,
+          [name]: value
         }  
-      }else if(name === "lName"){
-        return{
-          fName: prevName.fName,
-          lName: value
-        }
-      }
     })
   }
   return (
     <div className="container">
-        <h1>{headingText} {fullName.fName} {fullName.lName}</h1>
-        <h2>{props.fruits}</h2> 
+        <h1>{headingText} {fullAccount.fName} {fullAccount.lName}</h1>
+        <h2>{props.fruits} {fullAccount.email}</h2> 
         <form action="http://localhost:3000/addUser" method="POST" onSubmit={() => checkEmpty()}>
           <input 
             onChange={handleChange} 
             name="fName"
-            type="text" id = "username" placeholder="First name" 
-            value={fullName.fName}
+            type="text" id = "fname" placeholder="First name" 
+            value={fullAccount.fName}
           />
            <input 
             onChange={handleChange} 
             name="lName"
-            type="text" id = "username" placeholder="Last name"  
-            value={fullName.lName}
+            type="text" id = "lname" placeholder="Last name"  
+            value={fullAccount.lName}
           />
+           <input 
+            onChange={handleChange} 
+            name="email"
+            type="text" id = "email" placeholder="Email"  
+            value={fullAccount.email}
+          />
+
           <button 
             id = "button-submit" type="submit"
             onClick={handleClick} 
